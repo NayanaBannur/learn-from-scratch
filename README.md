@@ -1,7 +1,13 @@
 # Learn from scratch
 
-A tool for learning any topic from scratch, one level at a time. A Claude Code skill
-generates a set of slides for a topic, and a web app renders them for you to step through.
+A tool for learning any topic from scratch. A Claude Code skill breaks a topic into a
+sequence of slides, and a web app lets you step through them at your own pace.
+
+The aim is to make a new topic both easy to digest and easy to revisit: a topic is usually
+only 15 to 25 short steps, each showing a little at once rather than a wall of text, and it
+stands on its own. Unlike a book, where a chapter can be hard to follow without the ones
+before it, a topic here is readable without chasing other sources — assuming some base
+knowledge of the field.
 
 ## How to use
 
