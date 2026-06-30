@@ -17,9 +17,11 @@ export function stripTitleHeading(markdown, title) {
 }
 
 // Replace [[cite:ID]] with a superscript citation link. `numberFor` maps an id
-// to its display number; unknown ids fall back to "?".
+// to its display number; unknown ids fall back to "?". Any whitespace before the
+// marker is consumed so the superscript stays glued to the preceding word and
+// never wraps onto a line of its own.
 export function applyCitations(md, numberFor) {
-  return md.replace(/\[\[cite:([A-Za-z0-9_-]+)\]\]/g, (_, id) => {
+  return md.replace(/[ \t]*\[\[cite:([A-Za-z0-9_-]+)\]\]/g, (_, id) => {
     const n = numberFor(id)
     return `<sup class="cite"><a href="#src-${id}" title="${id}">${n ?? '?'}</a></sup>`
   })
