@@ -40,3 +40,29 @@ To tailor how much the skill assumes you already know, it keeps a `user-knowledg
 directly. The skill creates this file from
 `user-knowledge.example.md` on first use — confirming with you what to keep — and adds to it
 only with your approval as you learn new topics.
+
+## Advanced features
+
+- **Tags** — every topic carries freeform tags (new ones start as `unread`); add, edit, or
+  remove them in the app to organise the library.
+- **Search** — filter the sidebar by topic title, or by tag, from the boxes at its top.
+- **Archive** — move topics into a separate Archive branch to keep the main list focused.
+- **Annotation** — toggle **Annotate** to write notes directly on a slide; annotations are
+  saved alongside the slides.
+
+## Example
+
+These two slides are from a module generated with:
+
+```
+/learn-from-scratch RSA encryption
+```
+
+A slide can be ordinary prose with a Markdown table — here, shared-secret vs public-key:
+
+![The public-key idea slide, showing a comparison table](docs/screenshots/rsa-public-key.png)
+
+Or a fully interactive React component — here, type your own primes and watch the key
+derive and a message round-trip $M \to C \to M$:
+
+![The "derive your own keys" slide, an interactive RSA key-derivation widget](docs/screenshots/rsa-interactive.png)
