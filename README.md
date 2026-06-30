@@ -1,11 +1,16 @@
 # Learn from scratch
 
-An interactive web app for learning a topic from scratch, one level at a time. Each
-topic is a sequence of sections stepped through by a vertical level slider — move the
-slider and it swaps in the next section, one at a time. Supports GitHub-flavoured
-Markdown, KaTeX math, citations, and interactive diagrams.
+A skill that generates slides for learning a topic from scratch, paired with a web app
+that renders them. Each topic is a sequence of sections stepped through by a vertical
+level slider — move the slider and it swaps in the next section, one at a time. Slides
+support GitHub-flavoured Markdown, KaTeX math, citations, and interactive diagrams.
 
 ## Quick start
+
+In Claude Code, you run the `/learn-from-scratch` skill on a topic; it can draw from any
+resource — a subject, a paper, a blog post — and does its research and writes its output
+within this repo, as a folder of slides under `content/`. The frontend is a static app
+that displays those folders.
 
 ```bash
 npm install
@@ -24,38 +29,14 @@ Claude Code, invoke it with a topic:
 /learn-from-scratch <topic>
 ```
 
-The argument can be a subject, a paper, a blog post, or any other source to learn from. It
-proposes a curriculum, then writes a verified module into `content/`, which shows up in the
-sidebar on the next dev reload.
+The argument can be a subject, a paper, a blog post, or any other source to learn from. The
+skill proposes a curriculum, then writes a verified topic as a leaf folder under `content/`
+(e.g. `content/internet/dns/`) — a `manifest.json`, one Markdown file per section under
+`sections/`, and optional `assets/` (SVGs or per-topic React components). The folder path
+becomes the sidebar location, and the topic shows up there on the next dev reload.
 
 To tailor how much the skill assumes you already know, it keeps a `user-knowledge.md` file
 (gitignored, like `content/`) recording what you already know, so it can use those terms
-directly instead of re-explaining them. The skill creates this file from
+directly. The skill creates this file from
 `user-knowledge.example.md` on first use — confirming with you what to keep — and adds to it
 only with your approval as you learn new topics.
-
-## Project layout
-
-```
-.
-├── index.html              # Vite entry
-├── vite.config.js          # build config
-├── src/
-│   ├── main.jsx            # React entry
-│   ├── App.jsx
-│   ├── components/         # presentational components (slider, sidebar, sections, diagrams…)
-│   └── lib/                # logic: content loading, markdown rendering, annotations
-└── content/                # the topics (data) — see below
-```
-
-## Content
-
-Topics are generated with the `learn-from-scratch` skill under `.claude/skills/`.
-
-Topics live under `content/` as leaf folders (e.g. `content/internet/dns/`). Each topic
-folder holds a `manifest.json`, one Markdown file per section under `sections/`, and
-optional `assets/` (SVGs or per-topic React components). The folder path becomes the
-sidebar location. Content is loaded at build/dev time via Vite globs
-(`src/lib/content.js`).
-
-**`content/` is gitignored** — topic content is managed separately from the app code.
