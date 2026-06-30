@@ -317,10 +317,17 @@ skill folder (read it).
   asset `src`/`module`, and `[[cite:ID]]` resolves.
 - **Verify the visuals actually render correctly — do not stop at valid JSON.** JSON
   validation does not catch overflowing labels, text overlapping a node, edges crossing
-  through text, or a component spilling its container. Run the app (`npm run dev`) and
-  **look at every diagram and component at the levels where they appear**, driving a real
-  browser (use the `verify` / `run` skill or a headless browser to load the topic and
-  capture each diagram). For each one confirm: no label or caption clipped at the viewBox
+  through text, or a component spilling its container. Start your own verification server
+  with **`npm run dev:verify`** (it runs on a dedicated port, `5199`, isolated from the
+  user's `npm run dev` on 5173) and **look at every diagram and component at the levels
+  where they appear**, driving a real browser (use the `verify` / `run` skill or a headless
+  browser to load the topic and capture each diagram).
+  - **Never kill the user's server.** Do not `pkill -f vite`, kill port 5173, or kill vite
+    by pattern — that takes down the user's running app. Start `npm run dev:verify`, and when
+    done stop only the process you started (kill its specific PID, or only port `5199`). If
+    `5199` is already in use it's a stale verify server of yours — reuse it or kill `5199`
+    alone. The user's content reloads live as you write it, so they can watch the module
+    build in their own browser while you verify in yours. For each one confirm: no label or caption clipped at the viewBox
   edge or spilling its box, no text overlapping another node/edge/label, the component fits
   and its reset + bad-input validation work. Fix overflow by shortening or splitting text /
   simplifying the layout, then re-check — repeat until every visual is clean.

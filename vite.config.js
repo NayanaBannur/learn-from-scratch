@@ -6,6 +6,59 @@ import path from 'node:path'
 // The app lives at the repo root so it can glob the `content/` topic
 // hierarchy with root-relative `import.meta.glob('/content/**')` paths.
 
+// Full-reload suppression for content files the app writes itself. The dev
+// endpoints below persist tags/archived into manifest.json; without this, each
+// such save would trigger a page reload (contentLiveReload watches manifest.json
+// so the *agent's* edits show up live). Keyed by absolute path with a short TTL,
+// so only the app's own write is muffled — a real edit moments later still reloads.
+const reloadSuppress = new Map()
+function suppressReload(file) {
+  reloadSuppress.set(file, Date.now() + 2500)
+}
+function isSuppressed(file) {
+  const exp = reloadSuppress.get(file)
+  if (exp && Date.now() < exp) return true
+  if (exp) reloadSuppress.delete(file)
+  return false
+}
+
+// Force a full page reload whenever a content file changes, is added, or is
+// removed — so the app re-reads the topic tree as the learn-from-scratch agent
+// writes it (you watch slides fill in live). A full reload (not Fast Refresh) is
+// required because the app caches loadTopics() in a useMemo([]), which Fast
+// Refresh preserves — so only a fresh page picks up new content.
+function contentLiveReload() {
+  const shouldReload = (file) => {
+    if (!file.includes('/content/')) return false
+    // annotations.json is pure in-app UI state (drawing comments); never reload.
+    if (file.endsWith('/annotations.json')) return false
+    // manifest.json written by our own tags/archived endpoints — already applied
+    // optimistically in the UI, so skip the reload that would otherwise follow.
+    if (file.endsWith('/manifest.json') && isSuppressed(file)) return false
+    return true
+  }
+  return {
+    name: 'content-live-reload',
+    // Edited content file (markdown, svg, manifest, component). Returning [] also
+    // suppresses Vite's default HMR for these files, so the explicit full-reload
+    // is the only update the browser applies.
+    handleHotUpdate(ctx) {
+      if (!ctx.file.includes('/content/')) return
+      if (shouldReload(ctx.file)) ctx.server.ws.send({ type: 'full-reload' })
+      return []
+    },
+    // New/deleted content files (e.g. the agent writing a new topic's sections)
+    // aren't in the module graph yet, so they never reach handleHotUpdate.
+    configureServer(server) {
+      const onFs = (file) => {
+        if (shouldReload(file)) server.ws.send({ type: 'full-reload' })
+      }
+      server.watcher.on('add', onFs)
+      server.watcher.on('unlink', onFs)
+    },
+  }
+}
+
 // Dev-only middleware that persists annotations to `annotations.json` inside the
 // topic's content folder. The browser can't write files itself, so the app
 // POSTs here while developing. (In a production build this endpoint is absent
@@ -114,6 +167,8 @@ function tagsApi() {
                 // Empty — drop the key entirely to keep the manifest tidy.
                 delete manifest.tags
               }
+              // Our own write — don't let contentLiveReload reload the page for it.
+              suppressReload(file)
               await fs.writeFile(file, JSON.stringify(manifest, null, 2) + '\n')
               res.statusCode = 200
               res.end(JSON.stringify({ ok: true }))
@@ -182,6 +237,8 @@ function archivedApi() {
                 // Default state — drop the key entirely to keep the manifest tidy.
                 delete manifest.archived
               }
+              // Our own write — don't let contentLiveReload reload the page for it.
+              suppressReload(file)
               await fs.writeFile(file, JSON.stringify(manifest, null, 2) + '\n')
               res.statusCode = 200
               res.end(JSON.stringify({ ok: true }))
@@ -208,15 +265,5 @@ function archivedApi() {
 }
 
 export default defineConfig({
-  plugins: [react(), annotationsApi(), tagsApi(), archivedApi()],
-  server: {
-    watch: {
-      // These JSON files are written by the app's own dev endpoints (tags into
-      // manifest.json, annotations into annotations.json). The UI updates itself
-      // optimistically, so we don't want each save to trigger a full page reload
-      // (which would reset the open topic mid-edit). Markdown and everything else
-      // still hot-reloads normally.
-      ignored: ['**/content/**/manifest.json', '**/content/**/annotations.json'],
-    },
-  },
+  plugins: [react(), annotationsApi(), tagsApi(), archivedApi(), contentLiveReload()],
 })

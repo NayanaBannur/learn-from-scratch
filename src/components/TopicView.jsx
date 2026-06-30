@@ -7,8 +7,7 @@ import { useAnnotations } from '../lib/useAnnotations.js'
 
 // The main pane: title, then [vertical slider | content]. Only the current
 // step's section is on screen at a time; moving the slider swaps it in.
-export default function TopicView({ topic, tags, allTags, onTagsChange, archived, onArchivedChange }) {
-  const [level, setLevel] = useState(1)
+export default function TopicView({ topic, level, setLevel, tags, allTags, onTagsChange, archived, onArchivedChange }) {
   const [annotating, setAnnotating] = useState(false) // annotation mode on/off
   const { manifest, sections, levels, sources } = topic
 

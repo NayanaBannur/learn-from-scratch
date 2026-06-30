@@ -6,6 +6,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:verify": "vite --port 5199 --strictPort",
     "build": "vite build",
     "preview": "vite preview",
     "archive": "node scripts/archive.mjs --on",
