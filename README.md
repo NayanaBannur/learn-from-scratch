@@ -66,7 +66,7 @@ It also supports:
 
 ## Example
 
-This module was generated with:
+The RSA encryption module below was generated with:
 
 ```
 /learn-from-scratch RSA encryption
