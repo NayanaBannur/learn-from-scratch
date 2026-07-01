@@ -13,6 +13,8 @@
     "unarchive": "node scripts/archive.mjs --off"
   },
   "dependencies": {
+    "html2canvas": "^1.4.1",
+    "jspdf": "^4.2.1",
     "katex": "^0.17.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",

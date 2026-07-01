@@ -161,6 +161,91 @@ body {
   animation: fade-in 0.25s ease;
 }
 
+/* Off-screen document used to render the whole topic for PDF export. The wrapper
+   is parked at the origin and clipped to zero size, so the document stays in
+   layout (capturable by html2canvas) while invisible. The document itself sits at
+   (0,0) inside it — html2canvas renders the node at its own coordinates, so a
+   negative offset would push it off-canvas and yield a blank page. */
+.pdf-doc-wrap {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  z-index: -1;
+}
+.pdf-doc {
+  width: 960px;
+  background: #fff;
+  color: #1f2328;
+  /* Match the app's text size so prose reads at the same scale as the text
+     inside diagrams and tables (which render at their own fixed size). A much
+     bigger body font looks awkward beside a diagram's small labels, and growing
+     the text would also push diagram slides into being shrunk. Bottom whitespace
+     on short slides is the accepted trade. */
+  font-size: 15px;
+  line-height: 1.55;
+}
+.pdf-doc h1 {
+  font-size: 30px;
+}
+.pdf-doc .pdf-subtitle {
+  font-size: 15px;
+}
+/* One slide per PDF page. Each is a fixed-width frame; the height here is only a
+   default — at export time it's set in JS to this topic's tallest slide, so every
+   page is uniform and the longest slide fills without clipping. Content is
+   top-aligned at a consistent top margin so headings line up across slides. */
+.pdf-doc .pdf-page {
+  box-sizing: border-box;
+  width: 960px;
+  height: 840px;
+  display: flex;
+  align-items: flex-start;
+  overflow: hidden;
+  background: #fff;
+}
+.pdf-doc .pdf-page-inner {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 30px 56px;
+}
+.pdf-doc .diagram {
+  margin: 14px 0 0;
+}
+/* Centre the title slide in its page (the rest are top-aligned). */
+.pdf-doc .pdf-page:first-child {
+  align-items: center;
+}
+.pdf-doc .pdf-cover {
+  text-align: center;
+}
+.pdf-doc .content {
+  max-width: none;
+  margin: 0;
+}
+.pdf-doc h1 {
+  margin: 0 0 6px;
+}
+.pdf-doc .pdf-subtitle {
+  color: #6b7280;
+  margin: 0;
+}
+.pdf-doc .pdf-date {
+  color: #9ca3af;
+  font-size: 13px;
+  margin: 16px 0 0;
+}
+.pdf-doc .section {
+  animation: none;
+  margin: 0;
+  padding: 0;
+}
+.pdf-doc .sources {
+  margin: 0;
+}
+
 .section-head {
   display: flex;
   align-items: center;
@@ -449,6 +534,7 @@ sup.cite a {
 
 .mode-btn svg {
   display: block;
+  flex-shrink: 0;
 }
 
 .topic-body {

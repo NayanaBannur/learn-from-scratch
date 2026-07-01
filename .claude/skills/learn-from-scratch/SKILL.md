@@ -93,6 +93,20 @@ skill folder (read it).
   scroll on a typical viewport (≈ a heading plus a few short bullets or 2–4 short
   sentences, and at most one visual). Keep the content natural prose and diagrams — the
   only rule is that it *fits*.
+- **Give every level roughly the same length — they are also slides.** A topic exports to
+  a PDF deck, one level per landscape slide sized to the *longest* level, so uneven lengths
+  read badly: the deck's page height is set by the fullest level, and every shorter level
+  then sits with empty space below it. Aim for a consistent amount on each level — about a
+  heading, a short lead, and one visual or a few bullets — so they land within a narrow
+  band of each other. Target roughly **6–10 short lines of text, or one visual plus 2–3
+  lines**, per level, and hold every level near that. Concretely:
+  - **Split anything that runs long.** A level noticeably fuller than the others sets the
+    page height for the whole deck — break it into two adjacent levels (see "split it across
+    several small sequential sections").
+  - **Don't leave a level nearly empty.** A one-line level wastes a whole slide; fold it
+    into an adjacent step or give it enough to stand on its own.
+  - **Keep a visual to a moderate height** so it shares the slide with its heading and a
+    line or two, rather than towering over the text-only levels.
 - If an idea needs more than fits in the viewport, **split it across several small
   sequential sections at adjacent levels** rather than growing one section. Many small
   steps beat one dense one. A single visual (an `svg`, a table, or a `component`) plus a

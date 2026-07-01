@@ -9,12 +9,74 @@ import { useAnnotations } from '../lib/useAnnotations.js'
 // step's section is on screen at a time; moving the slider swaps it in.
 export default function TopicView({ topic, level, setLevel, tags, allTags, onTagsChange, archived, onArchivedChange }) {
   const [annotating, setAnnotating] = useState(false) // annotation mode on/off
+  const [exporting, setExporting] = useState(false) // PDF export in progress
   const { manifest, sections, levels, sources } = topic
 
   // Annotation state (persisted to annotations.json beside the content; see
   // useAnnotations) and a ref to the .content box used as the positioning frame.
   const contentRef = useRef(null)
   const annotations = useAnnotations(topic)
+
+  // PDF export. The slider keeps only the current section mounted, so for a
+  // shareable PDF we render the whole topic into an off-screen document and turn
+  // each slide into one PDF page (one click, no print dialog). The off-screen node
+  // must stay in layout (not display:none) for html2canvas to capture it, so it's
+  // positioned far off-screen via CSS.
+  const pdfRef = useRef(null)
+  useEffect(() => {
+    if (!exporting) return
+    let cancelled = false
+    const run = async () => {
+      const el = pdfRef.current
+      if (!el) return
+      // Let KaTeX fonts and layout settle before capturing.
+      try { await document.fonts?.ready } catch {}
+      await new Promise((r) => setTimeout(r, 150))
+      // No per-slide scaling — every slide renders at the identical font size.
+      // Drive jsPDF directly instead of html2pdf's auto-pagination: render each
+      // .pdf-page to its own canvas and stretch it to fill one PDF page. This
+      // avoids html2pdf's DPI rescale (which shrank content to ~75%) and its
+      // page-break handling (which inserted a blank page between every slide).
+      try {
+        const { jsPDF } = await import('jspdf')
+        const html2canvas = (await import('html2canvas')).default
+        const slug =
+          (manifest.title || 'topic').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') ||
+          'topic'
+        const pages = Array.from(el.querySelectorAll('.pdf-page'))
+        // Size every page to this topic's TALLEST slide so the longest one fills
+        // and nothing is clipped (the CSS height is only a default). Uniform
+        // within the deck; shorter slides sit roomy. scrollHeight already includes
+        // the slide's top+bottom padding.
+        const tallest = Math.max(...pages.map((p) => p.querySelector('.pdf-page-inner')?.scrollHeight || 0))
+        const pageHpx = Math.ceil(tallest + 16)
+        pages.forEach((p) => {
+          p.style.height = `${pageHpx}px`
+        })
+        // Page size in points, matching the .pdf-page's CSS pixels (1px = 0.75pt).
+        const wpt = pages[0].clientWidth * 0.75
+        const hpt = pageHpx * 0.75
+        let pdf = null
+        for (const page of pages) {
+          const canvas = await html2canvas(page, { scale: 2, backgroundColor: '#ffffff', useCORS: true })
+          if (!pdf) {
+            pdf = new jsPDF({ unit: 'pt', format: [wpt, hpt], orientation: 'landscape' })
+          } else {
+            pdf.addPage([wpt, hpt], 'landscape')
+          }
+          pdf.addImage(canvas.toDataURL('image/jpeg', 0.96), 'JPEG', 0, 0, wpt, hpt)
+        }
+        pdf.save(`${slug}.pdf`)
+      } catch (e) {
+        console.error('PDF export failed', e)
+      }
+      if (!cancelled) setExporting(false)
+    }
+    run()
+    return () => {
+      cancelled = true
+    }
+  }, [exporting, manifest.title])
 
   const numberFor = useMemo(() => {
     const map = Object.fromEntries(sources.map((s, i) => [s.id, i + 1]))
@@ -85,6 +147,7 @@ export default function TopicView({ topic, level, setLevel, tags, allTags, onTag
               onArchivedChange={onArchivedChange}
             />
             <AnnotateToggle active={annotating} setActive={setAnnotating} />
+            <PdfButton exporting={exporting} onClick={() => setExporting(true)} />
           </div>
         </div>
       </header>
@@ -134,6 +197,56 @@ export default function TopicView({ topic, level, setLevel, tags, allTags, onTag
           )}
         </div>
       </div>
+
+      {/* Off-screen full-topic document, mounted only during export. Every section
+          is laid out in reading order so html2canvas can capture each slide. The
+          wrapper clips it to zero size at the origin (0,0) — html2canvas renders the
+          captured node at its own coordinates, so it must sit on-canvas, not at a
+          negative offset. */}
+      {exporting && (
+        <div className="pdf-doc-wrap">
+        <div className="pdf-doc" ref={pdfRef} aria-hidden="true">
+          <div className="pdf-page">
+            <div className="pdf-page-inner pdf-cover">
+              <h1>{manifest.title}</h1>
+              {manifest.subtitle && <p className="pdf-subtitle">{manifest.subtitle}</p>}
+              {fmtCreated(manifest.dateCreated) && (
+                <p className="pdf-date">{fmtCreated(manifest.dateCreated)}</p>
+              )}
+            </div>
+          </div>
+          {sections.map((s) => (
+            <div className="pdf-page" key={s.id}>
+              {/* .content so the content-scoped styles (tables, code, …) apply */}
+              <div className="pdf-page-inner content">
+                <Section section={s} topic={topic} numberFor={numberFor} />
+              </div>
+            </div>
+          ))}
+          {hasRefs && (
+            <div className="pdf-page">
+              <footer className="pdf-page-inner sources">
+                <h2>References</h2>
+                <ol>
+                  {sources.map((s) => (
+                    <li key={s.id}>
+                      {s.url ? (
+                        <a href={s.url} target="_blank" rel="noreferrer">
+                          {s.title}
+                        </a>
+                      ) : (
+                        s.title
+                      )}
+                      {s.publisher && <span className="src-pub"> — {s.publisher}</span>}
+                    </li>
+                  ))}
+                </ol>
+              </footer>
+            </div>
+          )}
+        </div>
+        </div>
+      )}
     </main>
   )
 }
@@ -208,16 +321,47 @@ function TopicInfo({ subtitle, created, tags, allTags, onTagsChange, archived, o
   )
 }
 
-// Created date from the manifest, shown under the subtitle.
-// The date is an ISO "YYYY-MM-DD" string; rendered as e.g. "Jun 2, 2026".
-function TopicDates({ created }) {
+// One-click PDF export of the whole topic. Same visual language as the other
+// header buttons; shows a busy state while the PDF renders.
+function PdfButton({ exporting, onClick }) {
+  return (
+    <div className="mode-toggle" role="group" aria-label="Export PDF">
+      <button
+        type="button"
+        className="mode-btn"
+        disabled={exporting}
+        title="Download this topic as a PDF"
+        onClick={onClick}
+      >
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+          {/* download: arrow into a tray, balanced across the viewBox */}
+          <path d="M8 2.3v6.4" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
+          <path d="M5.2 6 8 8.8 10.8 6" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
+          <path d="M3 10.6v1.7c0 .5.4.9.9.9h8.2c.5 0 .9-.4.9-.9v-1.7" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+        <span>{exporting ? 'Exporting…' : 'PDF'}</span>
+      </button>
+    </div>
+  )
+}
+
+// Format the manifest's ISO "YYYY-MM-DD" created date as e.g. "Jun 2, 2026".
+// Returns null for a missing/malformed date. Shared by the About panel and the
+// PDF cover slide.
+function fmtCreated(created) {
   const [y, m, d] = (created || '').split('-').map(Number)
   if (!y || !m || !d) return null
-  const label = new Date(y, m - 1, d).toLocaleDateString('en-US', {
+  return new Date(y, m - 1, d).toLocaleDateString('en-US', {
     year: 'numeric',
     month: 'short',
     day: 'numeric',
   })
+}
+
+// Created date from the manifest, shown under the subtitle.
+function TopicDates({ created }) {
+  const label = fmtCreated(created)
+  if (!label) return null
   return <p className="topic-dates">Created {label}</p>
 }
 
