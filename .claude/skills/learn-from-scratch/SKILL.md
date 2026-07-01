@@ -93,20 +93,17 @@ skill folder (read it).
   scroll on a typical viewport (≈ a heading plus a few short bullets or 2–4 short
   sentences, and at most one visual). Keep the content natural prose and diagrams — the
   only rule is that it *fits*.
-- **Give every level roughly the same length — they are also slides.** A topic exports to
-  a PDF deck, one level per landscape slide sized to the *longest* level, so uneven lengths
-  read badly: the deck's page height is set by the fullest level, and every shorter level
-  then sits with empty space below it. Aim for a consistent amount on each level — about a
-  heading, a short lead, and one visual or a few bullets — so they land within a narrow
-  band of each other. Target roughly **6–10 short lines of text, or one visual plus 2–3
-  lines**, per level, and hold every level near that. Concretely:
-  - **Split anything that runs long.** A level noticeably fuller than the others sets the
-    page height for the whole deck — break it into two adjacent levels (see "split it across
-    several small sequential sections").
-  - **Don't leave a level nearly empty.** A one-line level wastes a whole slide; fold it
-    into an adjacent step or give it enough to stand on its own.
-  - **Keep a visual to a moderate height** so it shares the slide with its heading and a
-    line or two, rather than towering over the text-only levels.
+- **Don't let any level run long — keep them uniform.** Capping length keeps every level
+  glanceable and consistent. Three reasons: it fits the app viewport so the reader never has
+  to **scroll within a level**; it keeps the levels **uniform** so stepping through the
+  slider feels even; and because the PDF export makes one slide per level and sizes every
+  page to the *longest* level, one overstuffed level leaves every other slide in empty space.
+  The fix is not to pad the short levels: keep **one idea per level** and let a level be as
+  short as that idea needs — short levels are fine. It's to cap the top end. A level
+  noticeably longer than the rest is the signal to **split it** into adjacent levels (see
+  "split it across several small sequential sections"), so the levels sit within a similar
+  range rather than a few towering over the others. Keep any single visual to a moderate
+  height so it shares the slide with its heading and a line or two.
 - If an idea needs more than fits in the viewport, **split it across several small
   sequential sections at adjacent levels** rather than growing one section. Many small
   steps beat one dense one. A single visual (an `svg`, a table, or a `component`) plus a
@@ -262,6 +259,15 @@ skill folder (read it).
   sigmoid is named, not re-derived in words (see "Teach the jargon, then use it"). If you
   find yourself re-stating the formula left-to-right in English, delete it and write the
   implication instead.
+- **Format math and code for legibility — several inline pieces get messy fast.** A
+  sentence carrying several inline equations, symbols, or code spans (`$a$`, `$b_i$`,
+  `` `foo()` ``, `$\sum$…) reads as a dense run of symbols that's hard to parse. Give the
+  pieces room: pull anything of substance onto its **own display line** (`$$…$$` for math, a
+  fenced block for code), keep only short, single symbols inline, and break a step with
+  multiple formulas across separate sentences or a short list rather than stacking them in
+  one line. Introduce each symbol before it appears (see "Teach the jargon"). The test is
+  whether the reader can take in each expression on its own — if a line is a thicket of `$…$`
+  and backticks, restructure it.
 
 #### Diagrams & visuals
 
