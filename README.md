@@ -61,16 +61,23 @@ It also supports:
 - **Archive** — move topics into a separate Archive branch to keep the main list focused.
 - **Annotation** — toggle **Annotate** to write notes directly on a slide; annotations are
   saved alongside the slides.
+- **PDF export** — **PDF** downloads the whole topic as a single document to share, every
+  slide laid out in order.
 
 ## Example
 
-These two slides are from a module generated with:
+This module was generated with:
 
 ```
 /learn-from-scratch RSA encryption
 ```
 
-A slide can be ordinary prose with a Markdown table — here, shared-secret vs public-key:
+The skill first proposes a curriculum and waits for your go-ahead before generating:
+
+![The skill proposing a level-by-level curriculum in the terminal](docs/screenshots/rsa-curriculum.png)
+
+It then writes the slides. A slide can be ordinary prose with a Markdown table — here,
+shared-secret vs public-key:
 
 ![The public-key idea slide, showing a comparison table](docs/screenshots/rsa-public-key.png)
 
