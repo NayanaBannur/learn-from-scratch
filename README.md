@@ -18,8 +18,8 @@ npm install
 npm run dev      # start the Vite dev server
 ```
 
-Open the printed local URL (default http://localhost:5173). A clean clone has no topics
-yet — the page shows a "No topics yet" landing until you add one.
+Open the printed local URL (default http://localhost:5173). A fresh clone includes example
+slides (see [Examples](#examples) below).
 
 ### Add a topic
 
@@ -64,9 +64,13 @@ It also supports:
 - **PDF export** — **PDF** downloads the whole topic as a single document to share, every
   slide laid out in order.
 
-## Example
+## Examples
 
-The RSA encryption module below was generated with:
+Example slides are included under `content/examples/`. Run `npm run dev` and open them from
+the sidebar to view them in full.
+
+The screenshots below illustrate the skill generating a topic — here, an RSA encryption
+module produced with:
 
 ```
 /learn-from-scratch RSA encryption
