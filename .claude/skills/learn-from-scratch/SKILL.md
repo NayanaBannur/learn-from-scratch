@@ -261,7 +261,7 @@ skill folder (read it).
   implication instead.
 - **Format math and code for legibility — several inline pieces get messy fast.** A
   sentence carrying several inline equations, symbols, or code spans (`$a$`, `$b_i$`,
-  `` `foo()` ``, `$\sum$…) reads as a dense run of symbols that's hard to parse. Give the
+  `` `foo()` ``, `$\sum$` …) reads as a dense run of symbols that's hard to parse. Give the
   pieces room: pull anything of substance onto its **own display line** (`$$…$$` for math, a
   fenced block for code), keep only short, single symbols inline, and break a step with
   multiple formulas across separate sentences or a short list rather than stacking them in

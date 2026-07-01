@@ -6,4 +6,8 @@ $$C^d = M^{ed} = M^{k\varphi(n)+1} \pmod{n}.$$
 
 $$M^{\varphi(n)} \equiv 1 \pmod{n}.$$
 
-So $M^{k\varphi(n)+1} = (M^{\varphi(n)})^k \cdot M \equiv 1^k \cdot M \equiv M$. [[cite:rsa-intro]] The exponent $ed$ carries $M$ a whole number of laps around the modular circle and sets it down exactly where it started.
+So the exponent collapses: [[cite:rsa-intro]]
+
+$$M^{k\varphi(n)+1} = (M^{\varphi(n)})^k \cdot M \equiv 1^k \cdot M \equiv M.$$
+
+The exponent $ed$ carries $M$ a whole number of laps around the modular circle and sets it down exactly where it started.
