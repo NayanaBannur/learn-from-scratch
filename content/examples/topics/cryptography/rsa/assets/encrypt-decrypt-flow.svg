@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 660 180" font-family="-apple-system, system-ui, sans-serif">
+  <defs>
+    <marker id="bluehead" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="#2563eb"/>
+    </marker>
+    <marker id="greenhead" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="#2f6f4f"/>
+    </marker>
+  </defs>
+
+  <!-- message M -->
+  <rect x="24" y="70" width="96" height="56" rx="6" fill="#f3f4f6" stroke="#9ca3af"/>
+  <text x="72" y="104" text-anchor="middle" font-size="22" font-weight="700" fill="#1f2328">65</text>
+  <text x="72" y="148" text-anchor="middle" font-size="12" fill="#6b7280">message M</text>
+
+  <!-- encrypt arrow -->
+  <text x="201" y="46" text-anchor="middle" font-size="13" font-weight="600" fill="#2563eb">encrypt</text>
+  <text x="201" y="62" text-anchor="middle" font-size="11" fill="#6b7280">public key (17, 3233)</text>
+  <line x1="124" y1="98" x2="276" y2="98" stroke="#2563eb" stroke-width="2" marker-end="url(#bluehead)"/>
+
+  <!-- ciphertext C -->
+  <rect x="282" y="70" width="96" height="56" rx="6" fill="#e6effe" stroke="#2563eb"/>
+  <text x="330" y="104" text-anchor="middle" font-size="22" font-weight="700" fill="#1f2328">2790</text>
+  <text x="330" y="148" text-anchor="middle" font-size="12" fill="#6b7280">ciphertext C</text>
+
+  <!-- decrypt arrow -->
+  <text x="459" y="46" text-anchor="middle" font-size="13" font-weight="600" fill="#2f6f4f">decrypt</text>
+  <text x="459" y="62" text-anchor="middle" font-size="11" fill="#6b7280">private key (2753)</text>
+  <line x1="382" y1="98" x2="534" y2="98" stroke="#2f6f4f" stroke-width="2" marker-end="url(#greenhead)"/>
+
+  <!-- message M recovered -->
+  <rect x="540" y="70" width="96" height="56" rx="6" fill="#eaf4ee" stroke="#2f6f4f"/>
+  <text x="588" y="104" text-anchor="middle" font-size="22" font-weight="700" fill="#1f2328">65</text>
+  <text x="588" y="148" text-anchor="middle" font-size="12" fill="#6b7280">M recovered</text>
+</svg>

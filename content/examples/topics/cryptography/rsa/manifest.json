@@ -1,0 +1,53 @@
+{
+  "title": "RSA Encryption",
+  "subtitle": "Sharing a secret over a line everyone can hear",
+  "dateCreated": "2026-06-30",
+  "tags": ["unread", "cryptography"],
+  "levels": [
+    { "caption": "The secret-sharing problem" },
+    { "caption": "The public-key idea" },
+    { "caption": "Shared-secret vs public-key" },
+    { "caption": "Modular arithmetic" },
+    { "caption": "Congruence" },
+    { "caption": "The one-way trapdoor" },
+    { "caption": "Build the modulus n" },
+    { "caption": "The totient" },
+    { "caption": "The public exponent e" },
+    { "caption": "The private exponent d" },
+    { "caption": "Encrypt" },
+    { "caption": "Decrypt" },
+    { "caption": "Why it works" },
+    { "caption": "Derive your own keys" },
+    { "caption": "The paper's own example" },
+    { "caption": "Why it's secure" },
+    { "caption": "Digital signatures" },
+    { "caption": "In practice" }
+  ],
+  "sections": [
+    { "id": "the-problem", "title": "Agreeing on a secret in the open", "level": 1, "file": "sections/the-problem.md" },
+    { "id": "public-key-idea", "title": "The public-key idea", "level": 2, "file": "sections/public-key-idea.md" },
+    { "id": "symmetric-vs-public", "title": "Shared-secret vs public-key", "level": 3, "file": "sections/symmetric-vs-public.md" },
+    { "id": "modular-arithmetic", "title": "Modular arithmetic", "level": 4, "file": "sections/modular-arithmetic.md" },
+    { "id": "congruence", "title": "Congruence", "level": 5, "file": "sections/congruence.md" },
+    { "id": "one-way-trapdoor", "title": "The one-way trapdoor", "level": 6, "file": "sections/one-way-trapdoor.md" },
+    { "id": "build-modulus", "title": "Build the modulus n", "level": 7, "file": "sections/build-modulus.md" },
+    { "id": "totient", "title": "The totient", "level": 8, "file": "sections/totient.md" },
+    { "id": "public-exponent", "title": "The public exponent e", "level": 9, "file": "sections/public-exponent.md" },
+    { "id": "private-exponent", "title": "The private exponent d", "level": 10, "file": "sections/private-exponent.md" },
+    { "id": "encrypt", "title": "Encrypt", "level": 11, "file": "sections/encrypt.md" },
+    { "id": "decrypt", "title": "Decrypt", "level": 12, "file": "sections/decrypt.md" },
+    { "id": "why-it-works", "title": "Why decryption recovers the message", "level": 13, "file": "sections/why-it-works.md" },
+    { "id": "derive-keys", "title": "See it: derive your own keys", "level": 14, "file": "sections/derive-keys.md" },
+    { "id": "paper-example", "title": "The paper's own example", "level": 15, "file": "sections/paper-example.md" },
+    { "id": "why-secure", "title": "Why it's secure", "level": 16, "file": "sections/why-secure.md" },
+    { "id": "signatures", "title": "Digital signatures: run it backwards", "level": 17, "file": "sections/signatures.md", "additionalReading": true },
+    { "id": "in-practice", "title": "RSA in practice", "level": 18, "file": "sections/in-practice.md", "additionalReading": true }
+  ],
+  "sources": [
+    { "id": "rsa78", "title": "A Method for Obtaining Digital Signatures and Public-Key Cryptosystems", "publisher": "Rivest, Shamir & Adleman — Communications of the ACM 21(2), 1978", "url": "https://people.csail.mit.edu/rivest/Rsapaper.pdf" },
+    { "id": "dh76", "title": "New Directions in Cryptography", "publisher": "Diffie & Hellman — IEEE Transactions on Information Theory, 1976", "url": "https://ee.stanford.edu/~hellman/publications/24.pdf" },
+    { "id": "rsa-intro", "title": "Introduction to the RSA Algorithm and Modular Arithmetic", "publisher": "arXiv:cs/9903001", "url": "https://arxiv.org/abs/cs/9903001" },
+    { "id": "rfc8017", "title": "PKCS #1: RSA Cryptography Specifications Version 2.2", "publisher": "RFC 8017, IETF, 2016", "url": "https://www.rfc-editor.org/rfc/rfc8017" },
+    { "id": "nist", "title": "Recommendation for Key Management (SP 800-57 Part 1 Rev. 5)", "publisher": "NIST, 2020", "url": "https://csrc.nist.gov/pubs/sp/800/57/pt1/r5/final" }
+  ]
+}

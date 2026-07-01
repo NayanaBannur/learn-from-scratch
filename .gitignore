@@ -4,6 +4,7 @@ dist
 *.local
 **/settings.local.json
 .idea
-content
+content/*
+!content/examples/
 user-knowledge.md
 scratch
