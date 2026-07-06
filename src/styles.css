@@ -7,9 +7,48 @@
   --accent: #2f6f4f;
   --accent-soft: #e8f3ec;
   --new: #c2410c;
+  --edge: #b9bdc2;
+  --code-bg: #f2f2ef;
   --max-read: 760px;
+  color-scheme: light;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   color: var(--ink);
+}
+
+/* Dark palette: applied via the OS-level prefers-color-scheme when the user
+   hasn't made an explicit choice (no [data-theme] set), or forced by
+   [data-theme="dark"]/"light" from the sidebar toggle (see useTheme.js). Raw
+   diagram assets (SVG/JSX under content/) are hand-authored assuming a light
+   background, so they're pinned to a light card further down rather than
+   reflowed here — see ".diagram.svg-diagram/.component-diagram". */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    --bg: #17181b;
+    --panel: #1f2124;
+    --ink: #e7e7e5;
+    --muted: #9a9da3;
+    --line: #34363a;
+    --accent: #5cb686;
+    --accent-soft: #1e3229;
+    --new: #e2884f;
+    --edge: #55585e;
+    --code-bg: #26282c;
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme='dark'] {
+  --bg: #17181b;
+  --panel: #1f2124;
+  --ink: #e7e7e5;
+  --muted: #9a9da3;
+  --line: #34363a;
+  --accent: #5cb686;
+  --accent-soft: #1e3229;
+  --new: #e2884f;
+  --edge: #55585e;
+  --code-bg: #26282c;
+  color-scheme: dark;
 }
 
 * {
@@ -42,13 +81,41 @@ body {
   padding: 18px 14px;
 }
 
+.brand-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin: 4px 4px 16px 8px;
+}
+
 .brand {
   font-weight: 700;
   font-size: 14px;
   letter-spacing: 0.02em;
   text-transform: uppercase;
   color: var(--muted);
-  margin: 4px 8px 16px;
+}
+
+.theme-toggle {
+  flex: 0 0 auto;
+  width: 26px;
+  height: 26px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: var(--panel);
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.theme-toggle:hover {
+  color: var(--accent);
+  border-color: var(--accent);
 }
 
 .tree {
@@ -292,14 +359,14 @@ body {
 }
 
 .content code {
-  background: #f0f0ee;
+  background: var(--code-bg);
   padding: 1px 5px;
   border-radius: 4px;
   font-size: 0.9em;
 }
 
 .code-block {
-  background: #f6f6f4;
+  background: var(--code-bg);
   border: 1px solid var(--line);
   border-radius: 8px;
   padding: 12px;
@@ -333,6 +400,24 @@ sup.cite a {
   font-weight: 600;
   color: var(--muted);
   margin-bottom: 8px;
+}
+
+/* Raw SVG assets and per-topic JSX diagrams (content/**/assets/*) hardcode
+   colors that assume a light background — there's no reasonable way to
+   re-theme hundreds of hand-authored files. Pin their card to the light
+   palette always (identical to the default light --panel/--line, so this is
+   a no-op in light mode) rather than letting dark mode make their ink
+   unreadable. Interactive "flow" diagrams are excluded: they're built from
+   CSS variables and already re-theme correctly. */
+.diagram.svg-diagram,
+.diagram.component-diagram {
+  background: #ffffff;
+  border-color: #e7e7e4;
+}
+
+.diagram.svg-diagram figcaption,
+.diagram.component-diagram figcaption {
+  color: #6b7280;
 }
 
 .flow-svg {
@@ -374,7 +459,7 @@ sup.cite a {
 }
 
 .flow .edge line {
-  stroke: #b9bdc2;
+  stroke: var(--edge);
   stroke-width: 1.6;
 }
 
@@ -384,7 +469,7 @@ sup.cite a {
 }
 
 .flow .arrow-head {
-  fill: #b9bdc2;
+  fill: var(--edge);
 }
 
 .flow .edge-label {
@@ -505,7 +590,7 @@ sup.cite a {
   padding: 3px;
   border: 1px solid var(--line);
   border-radius: 10px;
-  background: #fff;
+  background: var(--panel);
 }
 
 .mode-btn {
@@ -877,7 +962,7 @@ sup.cite a {
   font: inherit;
   font-size: 13px;
   color: var(--ink);
-  background: #fff;
+  background: var(--panel);
 }
 
 .ann-textarea:focus {
@@ -1032,7 +1117,7 @@ sup.cite a {
   font-weight: 600;
   color: var(--ink);
   outline: none;
-  background: #fff;
+  background: var(--panel);
 }
 
 /* Suggestion dropdown for the header tag editor: tags flow as wrapping pills
@@ -1097,7 +1182,7 @@ sup.cite a {
 
 .topic-search-input:focus {
   border-color: var(--accent);
-  background: #fff;
+  background: var(--panel);
 }
 
 .topic-search-clear {
@@ -1164,7 +1249,7 @@ sup.cite a {
   padding: 2px;
   border: 1px solid var(--line);
   border-radius: 8px;
-  background: #fff;
+  background: var(--panel);
 }
 
 .tag-match-btn {
@@ -1215,7 +1300,7 @@ sup.cite a {
 
 .tag-filter-input:focus {
   border-color: var(--accent);
-  background: #fff;
+  background: var(--panel);
 }
 
 .tag-filter-menu {

@@ -5,7 +5,7 @@ import { allTagsOf, tagKey, topicMatchesTags } from '../lib/tags.js'
 // Folder-hierarchy navigation. Branch folders are collapsible headings (like a
 // file tree); leaf folders are selectable topics. A tag filter at the top narrows
 // the tree to topics carrying the selected tags.
-export default function Sidebar({ tree, topics, selected, onSelect, tagsByTopic }) {
+export default function Sidebar({ tree, topics, selected, onSelect, tagsByTopic, theme, setTheme }) {
   // Default: only the top level (depth 0) is expanded. A path present here has
   // been toggled away from its depth-based default.
   const [toggled, setToggled] = useState(() => new Set())
@@ -86,7 +86,10 @@ export default function Sidebar({ tree, topics, selected, onSelect, tagsByTopic 
 
   return (
     <nav className="sidebar">
-      <div className="brand">Learn from scratch</div>
+      <div className="brand-row">
+        <div className="brand">Learn from scratch</div>
+        <ThemeToggle theme={theme} setTheme={setTheme} />
+      </div>
 
       <div className="topic-search">
         <input
@@ -140,6 +143,26 @@ export default function Sidebar({ tree, topics, selected, onSelect, tagsByTopic 
         <p className="sidebar-empty">No topics match.</p>
       )}
     </nav>
+  )
+}
+
+// Cycles light → dark → system → light. "System" defers to the OS-level
+// prefers-color-scheme rather than pinning a palette (see useTheme.js).
+const THEME_NEXT = { light: 'dark', dark: 'system', system: 'light' }
+const THEME_ICON = { light: '☀', dark: '☾', system: '◐' }
+const THEME_LABEL = { light: 'Light', dark: 'Dark', system: 'System (auto)' }
+
+function ThemeToggle({ theme, setTheme }) {
+  return (
+    <button
+      type="button"
+      className="theme-toggle"
+      onClick={() => setTheme(THEME_NEXT[theme])}
+      title={`Theme: ${THEME_LABEL[theme]} — click to switch`}
+      aria-label={`Theme: ${THEME_LABEL[theme]}. Click to switch.`}
+    >
+      {THEME_ICON[theme]}
+    </button>
   )
 }
 

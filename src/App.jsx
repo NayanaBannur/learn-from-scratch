@@ -4,6 +4,7 @@ import TopicView from './components/TopicView.jsx'
 import { loadTopics, buildTree } from './lib/content.js'
 import { useTags } from './lib/useTags.js'
 import { useArchived } from './lib/useArchived.js'
+import { useTheme } from './lib/useTheme.js'
 
 // The open topic and slider level live in the URL hash (e.g.
 // "#%2Fcontent%2Fai%2Ftopics%2Flora::3"). This survives the full-reload that the
@@ -31,6 +32,7 @@ export default function App() {
   const [route, setRoute] = useState(readHash)
   const { tagsByTopic, setTopicTags } = useTags(topics)
   const { archivedByTopic, setTopicArchived } = useArchived(topics)
+  const [theme, setTheme] = useTheme()
   // Rebuild the tree when archived state changes so toggling moves a slide in or
   // out of the Archive branch immediately.
   const tree = useMemo(() => buildTree(topics, archivedByTopic), [topics, archivedByTopic])
@@ -67,6 +69,8 @@ export default function App() {
         selected={selected}
         onSelect={setSelected}
         tagsByTopic={tagsByTopic}
+        theme={theme}
+        setTheme={setTheme}
       />
       {topic ? (
         // key resets the slider level when switching topics
