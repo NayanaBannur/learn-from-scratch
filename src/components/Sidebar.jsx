@@ -5,7 +5,17 @@ import { allTagsOf, tagKey, topicMatchesTags } from '../lib/tags.js'
 // Folder-hierarchy navigation. Branch folders are collapsible headings (like a
 // file tree); leaf folders are selectable topics. A tag filter at the top narrows
 // the tree to topics carrying the selected tags.
-export default function Sidebar({ tree, topics, selected, onSelect, tagsByTopic, theme, setTheme }) {
+export default function Sidebar({
+  tree,
+  topics,
+  selected,
+  onSelect,
+  tagsByTopic,
+  theme,
+  setTheme,
+  collapsed,
+  onToggleCollapsed,
+}) {
   // Default: only the top level (depth 0) is expanded. A path present here has
   // been toggled away from its depth-based default.
   const [toggled, setToggled] = useState(() => new Set())
@@ -84,11 +94,41 @@ export default function Sidebar({ tree, topics, selected, onSelect, tagsByTopic,
 
   const anyMatch = !filterActive || Object.keys(topics).some((k) => matches(k))
 
+  // Collapsed to a slim rail: no tree, search, or filters — just a button to
+  // expand back. Hooks above still run so the full state is ready the moment
+  // the reader expands again.
+  if (collapsed) {
+    return (
+      <nav className="sidebar sidebar-collapsed">
+        <button
+          type="button"
+          className="sidebar-collapse-toggle"
+          onClick={onToggleCollapsed}
+          title="Expand sidebar"
+          aria-label="Expand sidebar"
+        >
+          »
+        </button>
+      </nav>
+    )
+  }
+
   return (
     <nav className="sidebar">
       <div className="brand-row">
         <div className="brand">Learn from scratch</div>
-        <ThemeToggle theme={theme} setTheme={setTheme} />
+        <div className="brand-actions">
+          <ThemeToggle theme={theme} setTheme={setTheme} />
+          <button
+            type="button"
+            className="sidebar-collapse-toggle"
+            onClick={onToggleCollapsed}
+            title="Collapse sidebar"
+            aria-label="Collapse sidebar"
+          >
+            «
+          </button>
+        </div>
       </div>
 
       <div className="topic-search">

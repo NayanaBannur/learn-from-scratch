@@ -5,6 +5,7 @@ import { loadTopics, buildTree } from './lib/content.js'
 import { useTags } from './lib/useTags.js'
 import { useArchived } from './lib/useArchived.js'
 import { useTheme } from './lib/useTheme.js'
+import { useSidebarCollapsed } from './lib/useSidebarCollapsed.js'
 
 // The open topic and slider level live in the URL hash (e.g.
 // "#%2Fcontent%2Fai%2Ftopics%2Flora::3"). This survives the full-reload that the
@@ -33,6 +34,7 @@ export default function App() {
   const { tagsByTopic, setTopicTags } = useTags(topics)
   const { archivedByTopic, setTopicArchived } = useArchived(topics)
   const [theme, setTheme] = useTheme()
+  const [sidebarCollapsed, setSidebarCollapsed] = useSidebarCollapsed()
   // Rebuild the tree when archived state changes so toggling moves a slide in or
   // out of the Archive branch immediately.
   const tree = useMemo(() => buildTree(topics, archivedByTopic), [topics, archivedByTopic])
@@ -62,7 +64,7 @@ export default function App() {
   const topic = selected ? topics[selected] : null
 
   return (
-    <div className="app">
+    <div className={`app ${sidebarCollapsed ? 'sidebar-collapsed' : ''}`}>
       <Sidebar
         tree={tree}
         topics={topics}
@@ -71,6 +73,8 @@ export default function App() {
         tagsByTopic={tagsByTopic}
         theme={theme}
         setTheme={setTheme}
+        collapsed={sidebarCollapsed}
+        onToggleCollapsed={() => setSidebarCollapsed((c) => !c)}
       />
       {topic ? (
         // key resets the slider level when switching topics

@@ -71,6 +71,11 @@ body {
   display: grid;
   grid-template-columns: 264px 1fr;
   height: 100vh;
+  transition: grid-template-columns 0.15s ease;
+}
+
+.app.sidebar-collapsed {
+  grid-template-columns: 40px 1fr;
 }
 
 /* ---------- Sidebar ---------- */
@@ -81,12 +86,45 @@ body {
   padding: 18px 14px;
 }
 
+.sidebar.sidebar-collapsed {
+  padding: 18px 0;
+  display: flex;
+  justify-content: center;
+}
+
+.sidebar-collapse-toggle {
+  flex: 0 0 auto;
+  width: 26px;
+  height: 26px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: var(--panel);
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.sidebar-collapse-toggle:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
 .brand-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 8px;
   margin: 4px 4px 16px 8px;
+}
+
+.brand-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .brand {
@@ -402,7 +440,7 @@ sup.cite a {
   margin-bottom: 8px;
 }
 
-/* Raw SVG assets and per-topic JSX diagrams (content/**/assets/*) hardcode
+/* Raw SVG assets and per-topic JSX diagrams (content/.../assets/*) hardcode
    colors that assume a light background — there's no reasonable way to
    re-theme hundreds of hand-authored files. Pin their card to the light
    palette always (identical to the default light --panel/--line, so this is
