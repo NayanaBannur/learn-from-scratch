@@ -177,6 +177,18 @@ skill folder (read it).
 
 #### Writing & tone
 
+- **Write for a reader who never saw the conversation that produced this.** Readers see only
+  the finished slides, never the back-and-forth — a fix must read as plain, direct writing,
+  not a clarification aimed at a confusion only visible in the conversation. The two rules
+  below follow from this.
+- **When correcting existing content, rewrite the passage — don't append a fix onto it.**
+  A correction should read as if it were written that way from the start, not as an original
+  sentence plus a bolted-on caveat or follow-up clause. Rewrite the whole passage so it reads
+  as one coherent piece of writing, not a patch trail.
+- **Never lead with a negative frame before the positive fact.** Don't say what something
+  *isn't* before saying what it is ("These three keys don't...", "Not every line...") —
+  state the actual structure directly. Reserve contrast for correcting a specific factual
+  error (a date, number, name), never for style or rhetorical effect.
 - **Stay formal and professional — plain is not casual.** Plain language and low-level
   explanation are about *clarity and starting from first principles*, not about a relaxed
   register or talking down to the reader. Write for a capable adult who simply doesn't yet
@@ -268,6 +280,9 @@ skill folder (read it).
   one line. Introduce each symbol before it appears (see "Teach the jargon"). The test is
   whether the reader can take in each expression on its own — if a line is a thicket of `$…$`
   and backticks, restructure it.
+- **Pretty-print example JSON and code — never dump it as one compact line.** A multi-key
+  object squashed onto one line is hard to scan even in a code fence; format it the way a
+  code formatter would, one key per line, indented.
 
 #### Diagrams & visuals
 
